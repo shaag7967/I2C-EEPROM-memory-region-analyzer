@@ -70,13 +70,17 @@ class Hla(HighLevelAnalyzer):
         return region_name
 
     def check_EEPROM_access(self, region_name, memory_address, byte_count) -> str:
-        message = ''
+        messages = []
         if region_name is None:
-            message = f"Memory address {hex(memory_address)} not inside memory region"
+            messages.append(f"{hex(memory_address)} not inside memory region")
+            # check if it read/writes into other region
+            for name, region in self.regions.items():
+                if memory_address < region['start'] <=  memory_address + byte_count:
+                    messages.append(f"Overlapping '{name}'")
         else:
             if (memory_address + byte_count - 1) > self.regions[region_name]['end']:
-                message = f"Accessing memory beyond region end address ({hex(memory_address)} + {byte_count} bytes)"
-        return message
+                messages.append(f"Accessing memory beyond region end address ({hex(memory_address)} + {byte_count} bytes)")
+        return " | ".join(messages)
 
     def decode(self, frame: AnalyzerFrame):
         # START_CONDITION

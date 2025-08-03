@@ -5,7 +5,7 @@
   "version": "0.0.1",
   "description": "Analyzes read/write access to specified I2C EEPROM memory regions",
   "extensions": {
-    "I2C EEPROM Memory Region Decoder": {
+    "I2C EEPROM Memory Region Analyzer": {
       "type": "HighLevelAnalyzer",
       "entryPoint": "HighLevelAnalyzer.Hla"
     }
